@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:whatever="http://schemas.android.com/apk/res-auto"
+    xmlns:wheel="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+<RelativeLayout
+
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/fl1_job"
+
+        android:background="@color/white">
+    >
+    <deleva.com.requester.model.ResizableImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:background="@color/white"
+        android:gravity="center"
+        android:scaleType="fitXY"
+
+        android:src="@drawable/camera_icon"
+        android:id="@+id/img_job" />
+    <com.pnikosis.materialishprogress.ProgressWheel
+        android:id="@+id/progress_wheel_job"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        wheel:barColor="@color/colorPrimary"
+        wheel:progressIndeterminate="true" />
+    </FrameLayout>
+
+
+    <com.andreabaccega.widget.FormEditText
+        whatever:testType="alpha"
+        android:layout_below="@+id/fl1_job"
+
+        android:id="@+id/et_itemType"
+        android:layout_width="match_parent"
+        android:hint="Item Type"
+        android:layout_height="wrap_content"
+        />
+    <com.andreabaccega.widget.FormEditText
+        whatever:testType="alpha"
+        android:layout_below="@+id/et_itemType"
+        android:id="@+id/et_recipent_name"
+        android:layout_width="match_parent"
+        android:hint="Recipent Name"
+        android:layout_height="wrap_content"
+        />
+    <com.andreabaccega.widget.FormEditText
+        whatever:testType="phone"
+        android:layout_below="@+id/et_recipent_name"
+        android:id="@+id/et_ph"
+        android:layout_width="match_parent"
+        android:hint="Recipent Phone Number"
+        android:layout_height="wrap_content"
+        />
+    <com.andreabaccega.widget.FormEditText
+        whatever:testType="alpha"
+        android:layout_below="@+id/et_ph"
+        android:id="@+id/et_address"
+        android:layout_width="match_parent"
+        android:hint="Recipent Address"
+        android:layout_height="wrap_content"
+        />
+    <com.andreabaccega.widget.FormEditText
+        whatever:testType="alpha"
+        android:layout_below="@+id/et_address"
+        android:id="@+id/et_postcode"
+        android:layout_width="match_parent"
+        android:hint="PostCode "
+        android:layout_height="wrap_content"
+        />
+    <com.andreabaccega.widget.FormEditText
+        whatever:testType="alpha"
+        android:layout_below="@+id/et_postcode"
+        android:id="@+id/et_price"
+        android:layout_width="match_parent"
+        android:hint="Price "
+        android:layout_height="wrap_content"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="70dp"
+        android:gravity="center"
+        android:layout_below="@+id/et_price"
+
+        android:text="Submit"
+        android:id="@+id/btn_job_submit" />
+
+
+</RelativeLayout>
+    </ScrollView>
