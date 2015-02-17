@@ -27,10 +27,23 @@ public class Config {
 
     public static final String REQUESTER_REGISTER = "/register";
 
+    public static final String REQUESTER_JOB_POST = "/jobs";
+
+    public static final String MY_JOBS_URL = "/jobs/me";
+
+
+
+
+
     public static final String GET_TOKEN = "/getToken";
 
     public static String TOKEN_PREF = "requestertokenpref";
     public static String TOKEN = "requestertoken";
+
+    public static String PWD_REMEMBER_PREF = "rememberpwdpref";
+    public static String PWD_REMEMBER_USER = "user";
+    public static String PWD_REMEMBER = "pwd";
+
 
 
 

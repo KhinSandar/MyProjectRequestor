@@ -22,6 +22,7 @@ import com.kbeanie.imagechooser.api.ImageChooserManager;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 import deleva.com.requester.R;
+import deleva.com.requester.fragment.JobListFragment;
 import deleva.com.requester.fragment.JobPostFragment;
 
 
@@ -83,12 +84,17 @@ public class MainActivity extends ActionBarActivity {
 
         JobPostFragment jbPost = new JobPostFragment();
 
+        JobListFragment jbList = new JobListFragment();
+
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 
         if (position == 0) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, jbPost).commit();
             jbPost.setRetainInstance(true);// <-- this is important - otherwise the fragment manager will crash when readding the fragment
 
+        }else if(position == 1){
+            fragmentManager.beginTransaction().replace(R.id.content_frame, jbList).commit();
+            jbList.setRetainInstance(true);
         }
 
 

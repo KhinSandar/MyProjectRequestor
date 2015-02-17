@@ -8,10 +8,14 @@ import android.content.pm.Signature;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -90,6 +94,30 @@ public class LoginActivity extends ActionBarActivity {
         //printHashKey();
         uiHelper = new UiLifecycleHelper(LoginActivity.this, callback);
         uiHelper.onCreate(savedInstanceState);
+
+        ((CheckBox) findViewById(R.id.login_showpwd)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                password.setInputType(!isChecked ? InputType.TYPE_TEXT_VARIATION_PASSWORD : InputType.TYPE_CLASS_TEXT);
+                password.setTransformationMethod(!isChecked ? PasswordTransformationMethod.getInstance() : null);
+            }
+        });
+        ((CheckBox) findViewById(R.id.login_rememberpwd)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                SharedPreferences sPref = getApplicationContext().getSharedPreferences(Config.PWD_REMEMBER_PREF, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sPref.edit();
+                //String username = username.getText().toString();
+                editor.putString(Config.PWD_REMEMBER_USER, username.getText().toString());
+                editor.putString(Config.PWD_REMEMBER, password.getText().toString());
+                editor.commit();
+
+
+                //password.setInputType(!isChecked ? InputType.TYPE_TEXT_VARIATION_PASSWORD : InputType.TYPE_CLASS_TEXT);
+                //password.setTransformationMethod(!isChecked ? PasswordTransformationMethod.getInstance() : null);
+            }
+        });
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,10 +207,15 @@ public class LoginActivity extends ActionBarActivity {
         txt_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, JobDetailActivity.class));
+                startActivity(new Intent(LoginActivity.this, RegisterActivtiy.class));
                 finish();
             }
         });
+
+        SharedPreferences sPref = getApplicationContext().getSharedPreferences(Config.TOKEN_PREF, MODE_PRIVATE);
+        if(sPref.getString(Config.TOKEN, null) != null){
+            startActivity(new Intent(this, MainActivity.class));
+        }
 
 
 

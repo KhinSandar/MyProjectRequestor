@@ -1,7 +1,5 @@
 package deleva.com.requester.api;
 
-import android.util.Log;
-
 import com.squareup.okhttp.OkHttpClient;
 
 import java.io.BufferedReader;
@@ -22,12 +20,12 @@ import retrofit.mime.TypedOutput;
 /**
  * Created by khinsandar on 2/3/15.
  */
-public class RegisterApi {
+public class JobPostApi {
 
-    private static RegisterApi mInstance;
-    private RegisterService mService;
+    private static JobPostApi mInstance;
+    private JobPostService mService;
 
-    public  RegisterApi(){
+    public JobPostApi(){
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.setConnectTimeout(7000, TimeUnit.MILLISECONDS);
         okHttpClient.setReadTimeout(7000, TimeUnit.MILLISECONDS);
@@ -48,7 +46,7 @@ public class RegisterApi {
                 .build();
 
 
-        mService = restAdapter.create(RegisterService.class);
+        mService = restAdapter.create(JobPostService.class);
 
 
 
@@ -56,13 +54,13 @@ public class RegisterApi {
 
     }
 
-    public static RegisterApi getInstance(){
+    public static JobPostApi getInstance(){
         if(mInstance == null){
-            mInstance = new RegisterApi();
+            mInstance = new JobPostApi();
         }
         return  mInstance;
     }
-    public RegisterService getService(){
+    public JobPostService getService(){
         return mService;
     }
 
