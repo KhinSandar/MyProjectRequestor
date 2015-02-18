@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.andreabaccega.widget.FormEditText;
 import com.facebook.Settings;
 import com.kbeanie.imagechooser.api.ChooserType;
 import com.kbeanie.imagechooser.api.ChosenImage;
@@ -67,7 +68,9 @@ public class JobPostFragment extends Fragment implements ImageChooserListener {
 
     Button btnSubmit;
 
-    EditText et_type, et_address, et_address_ll, et_price, et_receiver_name, et_receiver_contact, et_post_code;
+    FormEditText et_type, et_address, et_address_ll, et_price, et_receiver_name, et_receiver_contact, et_post_code;
+
+
 
     SharedPreferences sPref;
 
@@ -92,12 +95,12 @@ public class JobPostFragment extends Fragment implements ImageChooserListener {
 
         btnSubmit = (Button) rootView.findViewById(R.id.btn_job_submit);
 
-        et_type = (EditText) rootView.findViewById(R.id.et_itemType);
-        et_receiver_name = (EditText) rootView.findViewById(R.id.et_recipent_name);
-        et_receiver_contact = (EditText) rootView.findViewById(R.id.et_ph);
-        et_address = (EditText) rootView.findViewById(R.id.et_rec_address);
-        et_post_code = (EditText) rootView.findViewById(R.id.et_postcode);
-        et_price = (EditText) rootView.findViewById(R.id.et_price);
+        et_type = (FormEditText) rootView.findViewById(R.id.et_itemType);
+        et_receiver_name = (FormEditText) rootView.findViewById(R.id.et_recipent_name);
+        et_receiver_contact = (FormEditText) rootView.findViewById(R.id.et_ph);
+        et_address = (FormEditText) rootView.findViewById(R.id.et_rec_address);
+        et_post_code = (FormEditText) rootView.findViewById(R.id.et_postcode);
+        et_price = (FormEditText) rootView.findViewById(R.id.et_price);
 
         sPref = getActivity().getSharedPreferences(Config.TOKEN_PREF, Context.MODE_PRIVATE);
 
@@ -150,42 +153,62 @@ public class JobPostFragment extends Fragment implements ImageChooserListener {
             showSettingsAlert();
         }*/
 
+        final  FormEditText[] allFields    = { et_type, et_address, et_post_code, et_price,et_receiver_contact,et_receiver_name };
+
+
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
-                //SharedPreferences sPref =getActivity(). getApplicationContext().getSharedPreferences(Config.TOKEN_PREF, Context.MODE_PRIVATE);
-                String token = sPref.getString(Config.TOKEN, null);
-
-                //Toast.makeText(mcontext, "ON CLick"  + token + "&&" +Connection.isOnline(getActivity()), Toast.LENGTH_LONG).show();
-
-
-                if (token != null && Connection.isOnline(getActivity())) {
-
-
-                    JobPostApi.getInstance().getService().requestorJobPost(token, et_type.getText().toString(), et_address.getText().toString(), "96.154286, 16.799886", et_price.getText().toString(), et_receiver_name.getText().toString(), et_receiver_contact.getText().toString(), et_post_code.getText().toString(), new Callback<String>() {
-                        @Override
-                        public void success(String s, Response response) {
-                            Toast.makeText(mcontext, "Job Post Success" + s, Toast.LENGTH_LONG).show();
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-
-                            new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
-                                    .setTitleText("Oops...")
-                                    .setContentText(error.toString())
-                                    .show();
-
-                            //Toast.makeText(mcontext, "Job Post Errror" + error.toString(), Toast.LENGTH_LONG).show();
-
-
-                        }
-                    });
-                } else {
-                    //Toast.makeText(mcontext, "Connection Error", Toast.LENGTH_LONG).show();
+                boolean allValid = true;
+                for (FormEditText field: allFields) {
+                    allValid = field.testValidity() && allValid;
                 }
+
+                if (allValid) {
+
+                    //SharedPreferences sPref =getActivity(). getApplicationContext().getSharedPreferences(Config.TOKEN_PREF, Context.MODE_PRIVATE);
+                    String token = sPref.getString(Config.TOKEN, null);
+
+                    //Toast.makeText(mcontext, "ON CLick"  + token + "&&" +Connection.isOnline(getActivity()), Toast.LENGTH_LONG).show();
+
+
+                    if (token != null && Connection.isOnline(getActivity())) {
+
+
+                        JobPostApi.getInstance().getService().requestorJobPost(token, et_type.getText().toString(), et_address.getText().toString(), "96.154286, 16.799886", et_price.getText().toString(), et_receiver_name.getText().toString(), et_receiver_contact.getText().toString(), et_post_code.getText().toString(), new Callback<String>() {
+                            @Override
+                            public void success(String s, Response response) {
+                                Toast.makeText(mcontext, "Job Post Success" + s, Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                                new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Oops...")
+                                        .setContentText(error.toString())
+                                        .show();
+
+                                Toast.makeText(mcontext, "Job Post Errror" + error.toString(), Toast.LENGTH_LONG).show();
+
+
+                            }
+                        });
+                    } else {
+                        Toast.makeText(mcontext, "Connection Error", Toast.LENGTH_LONG).show();
+                    }
+
+
+
+
+                    // YAY
+                } else {
+                    // EditText are going to appear with an exclamation mark and an explicative message.
+                }
+
+
+
 
 
             }

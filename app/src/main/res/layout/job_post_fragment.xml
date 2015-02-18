@@ -56,7 +56,9 @@
             android:layout_marginRight="10dp"
             android:padding="10dp"
             android:textSize="25sp"
-            whatever:testType="alpha" />
+            whatever:testType="alpha"
+            whatever:emptyErrorString="@string/empty_string"
+            />
 
         <com.andreabaccega.widget.FormEditText
             android:id="@+id/et_recipent_name"
@@ -70,7 +72,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:padding="10dp"
-            whatever:testType="alpha" />
+            whatever:testType="personName"
+            whatever:emptyErrorString="@string/empty_string"/>
 
         <com.andreabaccega.widget.FormEditText
             android:id="@+id/et_ph"
@@ -84,7 +87,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:padding="10dp"
-            whatever:testType="phone" />
+            whatever:testType="phone"
+            whatever:emptyErrorString="@string/empty_string"/>
 
         <com.andreabaccega.widget.FormEditText
             android:id="@+id/et_rec_address"
@@ -98,7 +102,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:padding="10dp"
-            whatever:testType="alpha" />
+            whatever:testType="nocheck"
+            whatever:emptyErrorString="@string/empty_string"/>
 
         <com.andreabaccega.widget.FormEditText
             android:id="@+id/et_postcode"
@@ -112,7 +117,8 @@
             android:layout_marginRight="10dp"
             android:padding="10dp"
             android:textSize="25sp"
-            whatever:testType="alpha" />
+            whatever:testType="numeric"
+            whatever:emptyErrorString="@string/empty_string"/>
 
         <com.andreabaccega.widget.FormEditText
             android:id="@+id/et_price"
@@ -126,7 +132,10 @@
             android:layout_marginRight="10dp"
             android:padding="10dp"
             android:textSize="25sp"
-            whatever:testType="alpha" />
+            whatever:testType="numeric"
+            whatever:emptyErrorString="@string/empty_string"
+            whatever:testErrorString="@string/Number_only"
+            />
 
         <Button
             android:id="@+id/btn_job_submit"

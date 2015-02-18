@@ -38,37 +38,48 @@ public class SimpleHeaderRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private LayoutInflater mInflater;
     private ArrayList<JobItem> mItems;
-    private View mHeaderView;
+    //private View mHeaderView;
     private static Context mContext;
     //private Activity activity;
 
-    public SimpleHeaderRecyclerAdapter(Context context, ArrayList<JobItem> items, View headerView) {
+    public SimpleHeaderRecyclerAdapter(Context context, ArrayList<JobItem> items) {
         mInflater = LayoutInflater.from(context);
         mItems = items;
-        mHeaderView = headerView;
+        //mHeaderView = headerView;
         mContext = context;
+
         //activity = atx;
     }
 
     @Override
     public int getItemCount() {
-        if (mHeaderView == null) {
+
+        return mItems.size();
+        /*if (mHeaderView == null) {
             return mItems.size();
         } else {
             return mItems.size() + 1;
-        }
+        }*/
     }
 
     @Override
     public int getItemViewType(int position) {
-        return (position == 0) ? VIEW_TYPE_HEADER : VIEW_TYPE_ITEM;
+        //return (position == 0) ? VIEW_TYPE_HEADER : VIEW_TYPE_ITEM;
+         return  VIEW_TYPE_ITEM;
+
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
+        View v = mInflater.inflate(R.layout.custom_joblist, parent, false);
 
-        if (viewType == VIEW_TYPE_HEADER) {
+        v.setOnClickListener(this);
+
+        return new ItemViewHolder(v);
+
+
+        /*if (viewType == VIEW_TYPE_HEADER) {
             return new HeaderViewHolder(mHeaderView);
         } else {
 
@@ -77,28 +88,28 @@ public class SimpleHeaderRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             v.setOnClickListener(this);
 
             return new ItemViewHolder(v);
-        }
+        }*/
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof ItemViewHolder) {
-            ((ItemViewHolder) viewHolder).jobtype.setText(mItems.get(position - 1).get_type());
-            ((ItemViewHolder) viewHolder).jobaddress.setText(mItems.get(position - 1).get_address());
+            ((ItemViewHolder) viewHolder).jobtype.setText(mItems.get(position).get_type());
+            ((ItemViewHolder) viewHolder).jobaddress.setText(mItems.get(position).get_address());
 
-            if(mItems.get(position - 1).get_status().equals("P")) {
+            if(mItems.get(position).get_status().equals("P")) {
                 ((ItemViewHolder) viewHolder).jobstatus.setText("Pending");
             }
-            else if(mItems.get(position - 1).get_status().equals("A")) {
+            else if(mItems.get(position).get_status().equals("A")) {
                 ((ItemViewHolder) viewHolder).jobstatus.setText("Active");
             }
-            else if(mItems.get(position - 1).get_status().equals("F")) {
+            else if(mItems.get(position).get_status().equals("F")) {
                 ((ItemViewHolder) viewHolder).jobstatus.setText("Finish");
             }
-            else if(mItems.get(position - 1).get_status().equals("D")) {
+            else if(mItems.get(position).get_status().equals("D")) {
                 ((ItemViewHolder) viewHolder).jobstatus.setText("Delete");
             }
-            ((ItemViewHolder) viewHolder).v.setTag(position - 1);
+            ((ItemViewHolder) viewHolder).v.setTag(position);
         }
     }
 

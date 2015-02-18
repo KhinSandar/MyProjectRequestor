@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -128,7 +129,7 @@ public class JobListFragment extends Fragment implements View.OnClickListener {
                     Log.i("APIGet", "Success");
                     ArrayList<JobItem> items = (ArrayList<JobItem>) JSONToJob(s);
 
-                    recyclerView.setAdapter(new SimpleHeaderRecyclerAdapter( getActivity().getApplicationContext(), items, headerView));
+                    recyclerView.setAdapter(new SimpleHeaderRecyclerAdapter( getActivity().getApplicationContext(), items));//headerView
 
                     scrollview.setVisibility(View.VISIBLE);
                     connectionerrorview.setVisibility(View.INVISIBLE);
@@ -242,5 +243,14 @@ public class JobListFragment extends Fragment implements View.OnClickListener {
         Toast.makeText(getActivity(), "MyJobs", Toast.LENGTH_SHORT).show();
         getDatafromServer();
     }
+
+    //It is for use Keyboard layout Hide
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+    }
+
 
 }

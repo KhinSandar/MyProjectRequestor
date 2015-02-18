@@ -1,16 +1,22 @@
 package deleva.com.requester.app;
 
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andreabaccega.widget.FormEditText;
 import com.pnikosis.materialishprogress.ProgressWheel;
+
+import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import deleva.com.requester.R;
@@ -24,26 +30,27 @@ import retrofit.client.Response;
  */
 public class RegisterActivtiy extends ActionBarActivity implements View.OnClickListener{
 
-    TextView register;
-    EditText name, email, password, phone, address , business_type,business_address, business_address_2;
+    Button register;
+    FormEditText name, email, password, phone, address , business_type,business_address, business_address_2;
     ProgressWheel progress;
+    private double coordinates[] = new double[2];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_register);
-        register = (TextView) findViewById(R.id.register_button);
+        register = (Button) findViewById(R.id.register_button);
 
-        name = (EditText) findViewById(R.id.register_name);
-        email = (EditText) findViewById(R.id.register_email);
-        password = (EditText) findViewById(R.id.register_password);
-        phone = (EditText) findViewById(R.id.register_phone);
-        address = (EditText) findViewById(R.id.register_address);
+        name = (FormEditText) findViewById(R.id.register_name);
+        email = (FormEditText) findViewById(R.id.register_email);
+        password = (FormEditText) findViewById(R.id.register_password);
+        phone = (FormEditText) findViewById(R.id.register_phone);
+        address = (FormEditText) findViewById(R.id.register_address);
 
-        business_type = (EditText) findViewById(R.id.register_business_type);
-        business_address = (EditText) findViewById(R.id.register_business_add);
-        business_address_2 = (EditText) findViewById(R.id.register_business_add_2);
+        business_type = (FormEditText) findViewById(R.id.register_business_type);
+        business_address = (FormEditText) findViewById(R.id.register_business_add);
+        business_address_2 = (FormEditText) findViewById(R.id.register_business_add_2);
 
 
 
@@ -51,6 +58,10 @@ public class RegisterActivtiy extends ActionBarActivity implements View.OnClickL
         progress = (ProgressWheel) findViewById(R.id.register_progress_wheel);
 
         register.setOnClickListener(this);
+
+        coordinates = getGPS();//coordinates[0] is now the lat, [1] is the long.
+
+
 
 
 
@@ -83,28 +94,64 @@ public class RegisterActivtiy extends ActionBarActivity implements View.OnClickL
         String nam = name.getText().toString();
         final String mail = email.getText().toString();
         final String pwd = password.getText().toString();
-        progress.setVisibility(View.VISIBLE);
-        RegisterApi.getInstance().getService().requestorRegister(nam, mail, pwd, phone.getText().toString(), address.getText().toString(), business_type.getText().toString(), business_address.getText().toString(),"96.159190,16.775926" ,new Callback<String>() {
-            @Override
-            public void success(String s, Response response) {
-
-                Toast.makeText(getApplicationContext(),"Register Success" + s,Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                //getToken(mail, pwd);
-                progress.setVisibility(View.INVISIBLE);
 
 
-            }
+        final  FormEditText[] allFields    = { name, email, password, phone,address,business_type ,business_address };
 
-            @Override
-            public void failure(RetrofitError error) {
-                new SweetAlertDialog(RegisterActivtiy.this, SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Oops...")
-                        .setContentText(error.toString())
-                        .show();
 
-            }
-        });
+
+        boolean allValid = true;
+        for (FormEditText field: allFields) {
+            allValid = field.testValidity() && allValid;
+        }
+
+        if (allValid) {
+            progress.setVisibility(View.VISIBLE);
+
+            RegisterApi.getInstance().getService().requestorRegister(nam, mail, pwd, phone.getText().toString(), address.getText().toString(), business_type.getText().toString(), business_address.getText().toString(), String.valueOf(coordinates[1])+ String.valueOf(coordinates[0]), new Callback<String>() {
+                @Override
+                public void success(String s, Response response) {
+
+                    Toast.makeText(getApplicationContext(), "Register Success" + s, Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                    //getToken(mail, pwd);
+                    progress.setVisibility(View.INVISIBLE);
+
+
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    new SweetAlertDialog(RegisterActivtiy.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Oops...")
+                            .setContentText(error.toString())
+                            .show();
+
+                }
+            });
+        } else {
+            // EditText are going to appear with an exclamation mark and an explicative message.
+        }
 
     }
+
+    private double[] getGPS() {
+        LocationManager lm = (LocationManager) getSystemService(getApplicationContext().LOCATION_SERVICE);
+        List<String> providers = lm.getProviders(true);
+        /* Loop over the array backwards, and if you get an accurate location, then break out the loop*/
+        Location l = null;
+
+        for (int i=providers.size()-1; i>=0; i--) {
+            l = lm.getLastKnownLocation(providers.get(i));
+            if (l != null) break;
+        }
+
+        double[] gps = new double[2];
+        if (l != null) {
+            gps[0] = l.getLatitude();
+            gps[1] = l.getLongitude();
+        }
+        return gps;
+    }
+
 }
