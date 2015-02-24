@@ -27,9 +27,15 @@ public class Config {
 
     public static final String REQUESTER_REGISTER = "/register";
 
+    //http://kny.com:3001/api/v1.1/requester/jobs?access_token=fa45b840385ff4efa217fefb893ea4d4e552e2b50fcc5bae0b3c0556d2eedd53
     public static final String REQUESTER_JOB_POST = "/jobs";
 
+    //http://kny.co:3001/api/v1.1/requester/jobs/me?access_token=8f6b790c5d1fa7d080b7060df8e69d3caaf713aa148f7a17d9a7808b3c0395ed
     public static final String MY_JOBS_URL = "/jobs/me";
+
+    //http://kny.co:3001/api/v1.1/requester/jobs/54d3688d341828ca18100f22?access_token=8f6b790c5d1fa7d080b7060df8e69d3caaf713aa148f7a17d9a7808b3c0395ed
+    public static final String JOB_Detail = "/jobs/{id}";
+
 
 
 

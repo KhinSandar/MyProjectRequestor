@@ -29,7 +29,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import deleva.com.requester.R;
+import deleva.com.requester.api.JobDetailApi;
 import deleva.com.requester.app.JobDetailActivity;
+import deleva.com.requester.app.MyActivity;
 import deleva.com.requester.model.JobItem;
 
 public class SimpleHeaderRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
@@ -119,6 +121,7 @@ public class SimpleHeaderRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
             Intent intent = new Intent(mContext, JobDetailActivity.class);
 
+            //intent.putExtra("JobID", mItems.get((Integer)v.getTag()));
             intent.putExtra("JobItem", mItems.get((Integer)v.getTag()));
 
 

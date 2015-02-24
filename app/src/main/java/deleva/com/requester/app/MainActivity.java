@@ -2,6 +2,7 @@ package deleva.com.requester.app;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -88,13 +89,30 @@ public class MainActivity extends ActionBarActivity {
 
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 
-        if (position == 0) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, jbPost).commit();
-            jbPost.setRetainInstance(true);// <-- this is important - otherwise the fragment manager will crash when readding the fragment
+        switch (position) {
+            case 0:
+                fragmentManager.beginTransaction().replace(R.id.content_frame, jbPost).commit();
+                jbPost.setRetainInstance(true);// <-- this is important - otherwise the fragment manager will crash when readding the fragment
+                break;
 
-        }else if(position == 1){
-            fragmentManager.beginTransaction().replace(R.id.content_frame, jbList).commit();
-            jbList.setRetainInstance(true);
+            case 1:
+                fragmentManager.beginTransaction().replace(R.id.content_frame, jbList).commit();
+                jbList.setRetainInstance(true);
+                break;
+
+            case 2:
+                            /*fragmentManager.beginTransaction().replace(R.id.content_frame, new Settings()).commit();
+                setTitle("Setting");*/
+                Intent intent2 = new Intent(this.getApplicationContext(), RegisterActivtiy.class);
+
+                intent2.putExtra("ActivityName", "Register");
+                intent2.putExtra("user" ,"");
+
+                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent2);
+                break;
+
         }
 
 

@@ -212,6 +212,8 @@ public class LoginActivity extends ActionBarActivity {
             }
         });
 
+        //Direct Go to Main if Login session
+
         SharedPreferences sPref = getApplicationContext().getSharedPreferences(Config.TOKEN_PREF, MODE_PRIVATE);
         if(sPref.getString(Config.TOKEN, null) != null){
             startActivity(new Intent(this, MainActivity.class));

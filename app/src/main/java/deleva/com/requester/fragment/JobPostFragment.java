@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,8 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.andreabaccega.widget.FormEditText;
 import com.facebook.Settings;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.kbeanie.imagechooser.api.ChooserType;
 import com.kbeanie.imagechooser.api.ChosenImage;
 import com.kbeanie.imagechooser.api.ImageChooserListener;
@@ -40,6 +43,7 @@ import deleva.com.requester.api.JobPostApi;
 import deleva.com.requester.app.MainActivity;
 import deleva.com.requester.model.Connection;
 
+import deleva.com.requester.model.FusedLocationService;
 import deleva.com.requester.model.ResizableImageView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -70,13 +74,14 @@ public class JobPostFragment extends Fragment implements ImageChooserListener {
 
     FormEditText et_type, et_address, et_address_ll, et_price, et_receiver_name, et_receiver_contact, et_post_code;
 
-
+    FusedLocationService fusedLocationService;
 
     SharedPreferences sPref;
 
+    private static final String TAG = "JOBPOST";
 
 
-    private Double coordinates[] = null;
+    private double coordinates[] = new double[2];
 
 
     public JobPostFragment() {
@@ -126,14 +131,11 @@ public class JobPostFragment extends Fragment implements ImageChooserListener {
 
         //gpsTracker = new GPSTracker(mcontext);// Instantiate GPSTracker object
 
-        this.coordinates = new Double[]
-                {getGPS()[0] , getGPS()[1]
-
-                };
+        this.coordinates = getGPS();
         String location = "Current Location :" + "lat="
-                + this.coordinates[0].toString() + "&lng="
-                + this.coordinates[1].toString();
-        Toast.makeText(mcontext, "GPS Location" + location, Toast.LENGTH_LONG).show();
+                + this.coordinates[0]+ "&lng="
+                + this.coordinates[1] ;
+        Toast.makeText(mcontext, "GPS " + location, Toast.LENGTH_LONG).show();
 
         /*if (gpsTracker.canGetLocation()) {
 
@@ -153,12 +155,41 @@ public class JobPostFragment extends Fragment implements ImageChooserListener {
             showSettingsAlert();
         }*/
 
+        //show error dialog if GoolglePlayServices not available
+        if (!isGooglePlayServicesAvailable()) {
+             getActivity().finish();
+        }
+        fusedLocationService = new FusedLocationService(getActivity());
+
         final  FormEditText[] allFields    = { et_type, et_address, et_post_code, et_price,et_receiver_contact,et_receiver_name };
 
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Location location = fusedLocationService.getLocation();
+                String locationResult = "";
+                if (null != location) {
+                    Log.i(TAG, location.toString());
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    float accuracy = location.getAccuracy();
+                    //API Level 17 need
+                    //double elapsedTimeSecs = (double) location.getElapsedRealtimeNanos()/ 1000000000.0;
+                    String provider = location.getProvider();
+                    double altitude = location.getAltitude();
+                    locationResult = "Latitude: " + latitude + "\n" +
+                            "Longitude: " + longitude + "\n" +
+                            "Altitude: " + altitude + "\n" +
+                            "Accuracy: " + accuracy + "\n" +
+                            /*"Elapsed Time: " + elapsedTimeSecs + " secs" + "\n" +*/
+                            "Provider: " + provider + "\n";
+                } else {
+                    locationResult = "Google API Location Not Available!";
+                }
+                Toast.makeText(mcontext, "ON CLick"  +  locationResult, Toast.LENGTH_LONG).show();
+
 
                 boolean allValid = true;
                 for (FormEditText field: allFields) {
@@ -176,7 +207,7 @@ public class JobPostFragment extends Fragment implements ImageChooserListener {
                     if (token != null && Connection.isOnline(getActivity())) {
 
 
-                        JobPostApi.getInstance().getService().requestorJobPost(token, et_type.getText().toString(), et_address.getText().toString(), "96.154286, 16.799886", et_price.getText().toString(), et_receiver_name.getText().toString(), et_receiver_contact.getText().toString(), et_post_code.getText().toString(), new Callback<String>() {
+                        JobPostApi.getInstance().getService().requestorJobPost(token, et_type.getText().toString(), et_address.getText().toString(), String.valueOf(coordinates[1])+ ", "+ String.valueOf(coordinates[0]), et_price.getText().toString(), et_receiver_name.getText().toString(), et_receiver_contact.getText().toString(), et_post_code.getText().toString(), new Callback<String>() {
                             @Override
                             public void success(String s, Response response) {
                                 Toast.makeText(mcontext, "Job Post Success" + s, Toast.LENGTH_LONG).show();
@@ -444,6 +475,16 @@ public class JobPostFragment extends Fragment implements ImageChooserListener {
             gps[1] = l.getLongitude();
         }
         return gps;
+    }
+
+    private boolean isGooglePlayServicesAvailable() {
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
+        if (ConnectionResult.SUCCESS == status) {
+            return true;
+        } else {
+            GooglePlayServicesUtil.getErrorDialog(status, getActivity(), 0).show();
+            return false;
+        }
     }
 
 

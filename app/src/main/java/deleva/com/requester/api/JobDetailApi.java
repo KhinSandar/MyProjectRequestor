@@ -22,12 +22,12 @@ import retrofit.mime.TypedOutput;
 /**
  * Created by khinsandar on 2/3/15.
  */
-public class RegisterApi {
+public class JobDetailApi {
 
-    private static RegisterApi mInstance;
-    private RegisterService mService;
+    private static JobDetailApi mInstance;
+    private JobDetailService mService;
 
-    public  RegisterApi(){
+    public JobDetailApi(){
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.setConnectTimeout(7000, TimeUnit.MILLISECONDS);
         okHttpClient.setReadTimeout(7000, TimeUnit.MILLISECONDS);
@@ -41,14 +41,14 @@ public class RegisterApi {
                 .setLog(new RestAdapter.Log() {
                     @Override
                     public void log(String msg) {
-                        Log.e("//////////////Register API////////////////////////", msg);
+                       Log.e("//////////////Job Detail  API////////////////////////", msg);
                     }
                 })
                 .setConverter(new StringConverter()) //Reply String result
                 .build();
 
 
-        mService = restAdapter.create(RegisterService.class);
+        mService = restAdapter.create(JobDetailService.class);
 
 
 
@@ -56,15 +56,16 @@ public class RegisterApi {
 
     }
 
-    public static RegisterApi getInstance(){
+    public static JobDetailApi getInstance(){
         if(mInstance == null){
-            mInstance = new RegisterApi();
+            mInstance = new JobDetailApi();
         }
         return  mInstance;
     }
-    public RegisterService getService(){
+    public JobDetailService getService(){
         return mService;
     }
+
 
     public static class StringConverter implements Converter {
 

@@ -29,9 +29,19 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs {
+        release {
+            storeFile file('/Users/khinsandar/Documents/VipPro/Requester/app/requester.jks')
+            storePassword "developerone"
+            keyAlias "kny"
+            keyPassword "developerone"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -41,8 +51,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile project(':facebook')
-
-
     compile 'com.squareup.retrofit:retrofit:1.6.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
@@ -53,22 +61,14 @@ dependencies {
     compile 'cn.pedant.sweetalert:library:1.3'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.afollestad:material-dialogs:0.6.2.1'
-
     compile 'com.github.ksoichiro:android-observablescrollview:1.5.0'
-
     compile 'com.android.support:recyclerview-v7:21.0.0'
     compile 'com.android.support:cardview-v7:21.0.3'
+    //Google Map and Google API Location
 
-
-
-
-    //Google Map
     compile 'com.google.android.gms:play-services:6.5.87'
     //Editext Validator (https://github.com/vekexasia/android-edittext-validator)
     compile 'com.andreabaccega:android-form-edittext:1.1.0@aar'
     //https://github.com/KhinSandar/image-chooser-library
     compile 'com.kbeanie:image-chooser-library:+@aar'
-
-
-
 }

@@ -108,7 +108,7 @@ public class RegisterActivtiy extends ActionBarActivity implements View.OnClickL
         if (allValid) {
             progress.setVisibility(View.VISIBLE);
 
-            RegisterApi.getInstance().getService().requestorRegister(nam, mail, pwd, phone.getText().toString(), address.getText().toString(), business_type.getText().toString(), business_address.getText().toString(), String.valueOf(coordinates[1])+ String.valueOf(coordinates[0]), new Callback<String>() {
+            RegisterApi.getInstance().getService().requestorRegister(nam, mail, pwd, phone.getText().toString(), address.getText().toString(), business_type.getText().toString(), business_address.getText().toString(), String.valueOf(coordinates[1])+ ", "+ String.valueOf(coordinates[0]), new Callback<String>() {
                 @Override
                 public void success(String s, Response response) {
 
